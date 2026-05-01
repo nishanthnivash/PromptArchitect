@@ -326,7 +326,7 @@ export function PromptArchitect() {
 
                     <div className="flex items-center justify-center gap-3 mt-8">
                       <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
-                        <a href="mailto:hello@promptarchitect.ai">
+                        <a href="mailto:nishanthrocky756@gmail.com">
                           <Mail className="w-4 h-4" /> Email Me
                         </a>
                       </Button>
