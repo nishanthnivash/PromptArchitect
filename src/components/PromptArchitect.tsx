@@ -331,7 +331,7 @@ export function PromptArchitect() {
                         </a>
                       </Button>
                       <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
-                        <a href="https://linkedin.com" target="_blank">
+                        <a href="https://www.linkedin.com/in/nishanth-s-77b4a3264/?skipRedirect=true" target="_blank">
                           <Linkedin className="w-4 h-4" /> LinkedIn
                         </a>
                       </Button>
