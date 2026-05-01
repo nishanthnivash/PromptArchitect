@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Check, Edit2, Save, LucideIcon, Info } from "lucide-react";
+import { Copy, Check, Edit2, Save, LucideIcon, Info, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +15,8 @@ interface PromptCardProps {
   icon: LucideIcon;
   initialValue: string;
   description: string;
+  isStarred?: boolean;
+  onStarToggle?: () => void;
   scores: {
     clarity: number;
     specificity: number;
@@ -22,7 +24,15 @@ interface PromptCardProps {
   };
 }
 
-export function PromptCard({ title, icon: Icon, initialValue, description, scores }: PromptCardProps) {
+export function PromptCard({ 
+  title, 
+  icon: Icon, 
+  initialValue, 
+  description, 
+  scores, 
+  isStarred, 
+  onStarToggle 
+}: PromptCardProps) {
   const [content, setContent] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -61,6 +71,19 @@ export function PromptCard({ title, icon: Icon, initialValue, description, score
             </div>
           </div>
           <div className="flex items-center gap-1">
+            {onStarToggle && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  "h-7 w-7",
+                  isStarred ? "text-amber-500 fill-amber-500" : "text-muted-foreground hover:text-amber-500"
+                )}
+                onClick={onStarToggle}
+              >
+                <Star className="w-3 h-3" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon"
@@ -85,7 +108,6 @@ export function PromptCard({ title, icon: Icon, initialValue, description, score
       </CardHeader>
       
       <CardContent className="flex-1 space-y-4">
-        {/* Prompt Content */}
         <div className="relative">
           {isEditing ? (
             <Textarea
@@ -101,7 +123,6 @@ export function PromptCard({ title, icon: Icon, initialValue, description, score
           )}
         </div>
 
-        {/* Scores */}
         <div className="grid grid-cols-3 gap-3 pt-2">
           <ScoreIndicator label="Clarity" value={scores.clarity} />
           <ScoreIndicator label="Specificity" value={scores.specificity} />

@@ -17,6 +17,7 @@
             "properties": {
               "style": { "type": "string" },
               "content": { "type": "string" },
+              "isStarred": { "type": "boolean", "description": "Whether this specific variation is a favorite." },
               "scores": {
                 "type": "object",
                 "properties": {
