@@ -1,14 +1,12 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
 import { 
   Sparkles, Loader2, History, LogIn, LogOut, User, GitBranch, 
   Terminal, Megaphone, Trash2, Star, Search, Github, Linkedin, 
-  Globe, ExternalLink, Info, ShieldCheck, Zap, BarChart3, Clock,
-  Save, Edit2, Settings2, PlusCircle, LayoutGrid, Plus,
-  Settings, BookOpen, ChevronLeft, ChevronRight,
-  Map, Coffee, CheckCircle2, Lightbulb, Mail
+  Globe, Info, ShieldCheck, Zap, BarChart3, Clock,
+  Save, Edit2, Settings2, PlusCircle, LayoutGrid,
+  BookOpen, Coffee, Lightbulb, Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,8 +23,8 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 import {
   Tooltip,
   TooltipContent,
@@ -58,6 +56,8 @@ export function PromptArchitect() {
   const { user } = useUser();
   const auth = useAuth();
   const db = useFirestore();
+
+  const devPortrait = PlaceHolderImages.find(img => img.id === "dev-portrait")?.imageUrl;
 
   const userProfileRef = useMemo(() => {
     if (!db || !user) return null;
@@ -235,7 +235,7 @@ export function PromptArchitect() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Professional Header Navigation */}
+      {/* Header Navigation */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-primary/5 sticky top-4 z-50 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="bg-primary p-2.5 rounded-xl shadow-lg shadow-primary/20">
@@ -265,70 +265,27 @@ export function PromptArchitect() {
                   </DialogHeader>
                   <ScrollArea className="flex-1 p-6">
                     <div className="space-y-8">
-                      {/* 4 Step Process */}
                       <section>
                         <h3 className="text-lg font-bold flex items-center gap-2 mb-4 text-primary">
                           <LayoutGrid className="w-5 h-5" /> The 4-step process
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <StepItem 
-                            number="1" 
-                            title="Type your raw thought" 
-                            desc="No need to craft a perfect prompt. Just describe what you need in plain language — a task, a problem, an idea. The messier and more natural, the better."
-                          />
-                          <StepItem 
-                            number="2" 
-                            title="AI detects your intent" 
-                            desc="The engine analyzes your input — identifying your core objective, the context behind it, and the type of output you're likely after."
-                          />
-                          <StepItem 
-                            number="3" 
-                            title="Four prompt styles are generated" 
-                            desc="Your input is transformed into four distinctly structured prompts, each designed for a different use case. Each card is independently scored."
-                          />
-                          <StepItem 
-                            number="4" 
-                            title="Review, edit, and copy" 
-                            desc="Pick the prompt that fits best, tweak it inline if needed, then copy it straight into any AI tool — ChatGPT, Claude, Gemini, or your own API."
-                          />
+                          <StepItem number="1" title="Type your raw thought" desc="No need to craft a perfect prompt. Just describe what you need in plain language." />
+                          <StepItem number="2" title="AI detects your intent" desc="The engine analyzes your input — identifying your core objective and context." />
+                          <StepItem number="3" title="Four prompt styles are generated" desc="Your input is transformed into four distinctly structured prompts, each for a different use case." />
+                          <StepItem number="4" title="Review, edit, and copy" desc="Pick the best, tweak it, and copy it straight into any AI tool like ChatGPT or Claude." />
                         </div>
                       </section>
-
-                      {/* Tip Box */}
-                      <div className="bg-accent/10 border border-accent/20 p-4 rounded-xl flex gap-3">
-                        <Lightbulb className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                        <p className="text-sm text-foreground/80 italic">
-                          <span className="font-bold text-accent">Tip</span> — the more context you give, the better the output. Instead of "write an email", try "write an email to my manager about a delayed project, keeping it professional and solutions-focused".
-                        </p>
-                      </div>
-
                       <Separator />
-
-                      {/* Prompt Styles */}
                       <section>
                         <h3 className="text-lg font-bold mb-4 text-primary">The 4 prompt styles</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <StyleDetail icon={User} title="Persona Approach" desc="Assigns a role and expertise level. Best for professional, nuanced, or domain-specific tasks." />
-                          <StyleDetail icon={GitBranch} title="Chain-of-Thought" desc="Guides AI through logical step-by-step reasoning. Best for analysis and problem-solving." />
-                          <StyleDetail icon={Terminal} title="Technical / Coding" desc="Structures prompt for precise, code-ready output. Best for devs, APIs, and system design." />
-                          <StyleDetail icon={Megaphone} title="Marketing / Sales" desc="Frames output as persuasive copy. Best for pitches, product descriptions, and messaging." />
+                          <StyleDetail icon={User} title="Persona Approach" desc="Assigns role/expertise. Best for professional, domain-specific tasks." />
+                          <StyleDetail icon={GitBranch} title="Chain-of-Thought" desc="Guides AI through reasoning steps. Best for analysis and planning." />
+                          <StyleDetail icon={Terminal} title="Technical / Coding" desc="Precise, code-ready output. Best for devs and system design." />
+                          <StyleDetail icon={Megaphone} title="Marketing / Sales" desc="Persuasive copy. Best for pitches and audience messaging." />
                         </div>
                       </section>
-
-                      {/* Scoring */}
-                      <section className="bg-secondary/20 p-6 rounded-2xl">
-                        <h3 className="text-lg font-bold mb-4 text-center">How prompts are scored</h3>
-                        <div className="flex flex-wrap justify-around gap-6">
-                          <ScoreItem label="Clarity" desc="Is it unambiguous?" />
-                          <ScoreItem label="Specificity" desc="Does it define scope?" />
-                          <ScoreItem label="Quality" desc="Will AI respond well?" />
-                        </div>
-                      </section>
-
-                      <footer className="text-center py-4 text-muted-foreground text-sm font-medium">
-                        <p>Takes about 2 seconds · Works with any AI tool</p>
-                        <Button className="mt-4 bg-primary px-8 rounded-full" onClick={() => document.querySelector('textarea')?.focus()}>Try it now</Button>
-                      </footer>
                     </div>
                   </ScrollArea>
                 </DialogContent>
@@ -343,9 +300,9 @@ export function PromptArchitect() {
                 <DialogContent className="max-w-md p-0 overflow-hidden border-none shadow-2xl">
                   <div className="h-32 bg-gradient-to-r from-primary to-accent w-full" />
                   <div className="px-6 pb-8 text-center">
-                    <div className="relative mx-auto -mt-20 mb-4 h-40 w-40 overflow-hidden rounded-2xl border-4 border-white shadow-xl">
+                    <div className="relative mx-auto -mt-20 mb-4 h-48 w-48 overflow-hidden rounded-2xl border-4 border-white shadow-xl">
                       <img 
-                        src="https://picsum.photos/seed/dev-architect/400/400" 
+                        src={devPortrait} 
                         alt="Developer Portrait"
                         className="h-full w-full object-cover"
                         data-ai-hint="developer portrait"
@@ -446,10 +403,14 @@ export function PromptArchitect() {
               </div>
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-4">
-                  <Avatar className="h-14 w-14 rounded-xl ring-4 ring-primary/5">
-                    <AvatarImage src={user.photoURL || ""} className="rounded-xl" />
-                    <AvatarFallback className="bg-primary/10 text-primary font-bold rounded-xl">{profileForm.displayName ? profileForm.displayName[0] : 'U'}</AvatarFallback>
-                  </Avatar>
+                  <div className="relative h-16 w-16 overflow-hidden rounded-xl border-2 border-primary/10 shadow-md">
+                    <img 
+                      src={devPortrait} 
+                      alt="Profile" 
+                      className="h-full w-full object-cover"
+                      data-ai-hint="developer portrait"
+                    />
+                  </div>
                   <div className="flex-1 min-w-0">
                     {isEditingProfile ? (
                       <Input 
@@ -498,7 +459,6 @@ export function PromptArchitect() {
               </CardContent>
             </Card>
 
-            {/* App Overview Card */}
             <Card className="shadow-xl border-none bg-gradient-to-br from-white to-secondary/20">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -509,9 +469,6 @@ export function PromptArchitect() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-[11px] text-muted-foreground mb-4 leading-normal">
-                  Architecting high-performance instructions using multi-style variations and intent-driven logic.
-                </p>
                 <div className="grid grid-cols-2 gap-2">
                   <StatItem icon={Zap} label="Styles" value="4 Active" />
                   <StatItem icon={BarChart3} label="Engine" value="Gemini 2.5" />
@@ -521,12 +478,11 @@ export function PromptArchitect() {
               </CardContent>
             </Card>
 
-            {/* Prompt Library */}
             <Card className="shadow-xl border-none flex-1 flex flex-col min-h-[350px] bg-white">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <History className="w-4 h-4 text-primary" /> Prompt Library
+                    <History className="w-4 h-4 text-primary" /> Library
                   </CardTitle>
                   <Badge className="bg-primary/5 text-primary border-none text-[10px] font-bold">{filteredHistory.length}</Badge>
                 </div>
@@ -567,12 +523,6 @@ export function PromptArchitect() {
                         <p className="text-[9px] text-muted-foreground line-clamp-1 italic pr-6">"{item.rawThought}"</p>
                       </div>
                     ))}
-                    {filteredHistory.length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground/40">
-                        <History className="w-8 h-8 mb-2 opacity-20" />
-                        <p className="text-[10px] font-medium italic">Your architectural history will appear here.</p>
-                      </div>
-                    )}
                   </div>
                 </ScrollArea>
               </CardContent>
@@ -598,14 +548,10 @@ export function PromptArchitect() {
                 onChange={(e) => setRawThought(e.target.value)}
               />
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                {results?.detectedIntent ? (
+                {results?.detectedIntent && (
                   <div className="flex items-center gap-3 bg-primary/5 px-4 py-2 rounded-xl border border-primary/10 animate-in fade-in zoom-in duration-300">
                     <span className="text-[9px] font-bold text-primary uppercase tracking-widest">Architect's Intent Detection:</span>
                     <span className="text-sm font-semibold text-foreground">{results.detectedIntent}</span>
-                  </div>
-                ) : (
-                  <div className="hidden sm:flex items-center gap-2 text-muted-foreground/50 text-[10px] uppercase font-bold tracking-widest">
-                    <PlusCircle className="w-3 h-3" /> Input required to begin
                   </div>
                 )}
                 <Button 
@@ -666,15 +612,6 @@ function StyleDetail({ icon: Icon, title, desc }: { icon: any; title: string; de
         <h4 className="text-[13px] font-bold">{title}</h4>
         <p className="text-[11px] text-muted-foreground leading-tight">{desc}</p>
       </div>
-    </div>
-  );
-}
-
-function ScoreItem({ label, desc }: { label: string; desc: string }) {
-  return (
-    <div className="text-center">
-      <p className="text-xs font-bold text-primary">{label}</p>
-      <p className="text-[10px] text-muted-foreground">{desc}</p>
     </div>
   );
 }
