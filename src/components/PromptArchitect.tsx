@@ -682,15 +682,16 @@ function SocialLink({ icon: Icon, href, editMode, value, onChange }: { icon: any
     </a>
   );
 }
-}
 
-function StepItem({ number, title, desc }: { number: string; title: string; desc: string }) {
+function StatItem({ icon: Icon, label, value }: { icon: any, label: string, value: string }) {
   return (
-    <div className="flex gap-4">
-      <div className="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">{number}</div>
+    <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/50 border border-primary/5 shadow-sm">
+      <div className="bg-primary/10 p-1.5 rounded-lg">
+        <Icon className="w-3.5 h-3.5 text-primary" />
+      </div>
       <div>
-        <h4 className="font-bold text-sm mb-1">{title}</h4>
-        <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+        <p className="text-[8px] uppercase tracking-widest text-muted-foreground font-bold">{label}</p>
+        <p className="text-[11px] font-bold text-foreground">{value}</p>
       </div>
     </div>
   );
@@ -705,30 +706,6 @@ function StyleDetail({ icon: Icon, title, desc }: { icon: any; title: string; de
       <div>
         <h4 className="text-[13px] font-bold">{title}</h4>
         <p className="text-[11px] text-muted-foreground leading-tight">{desc}</p>
-      </div>
-    </div>
-  );
-}
-
-function SocialLink({ icon: Icon, href, editMode, value, onChange }: { icon: any; href: string; editMode: boolean; value: string; onChange: (v: string) => void }) {
-  if (editMode) return <Input value={value} onChange={e => onChange(e.target.value)} className="h-7 text-[10px] bg-secondary/30" placeholder="URL" />;
-  if (!href) return null;
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-secondary/50 text-muted-foreground hover:bg-primary hover:text-white transition-all">
-      <Icon className="w-3.5 h-3.5" />
-    </a>
-  );
-}
-
-function StatItem({ icon: Icon, label, value }: { icon: any, label: string, value: string }) {
-  return (
-    <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/50 border border-primary/5 shadow-sm">
-      <div className="bg-primary/10 p-1.5 rounded-lg">
-        <Icon className="w-3.5 h-3.5 text-primary" />
-      </div>
-      <div>
-        <p className="text-[8px] uppercase tracking-widest text-muted-foreground font-bold">{label}</p>
-        <p className="text-[11px] font-bold text-foreground">{value}</p>
       </div>
     </div>
   );
