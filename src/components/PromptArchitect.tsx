@@ -7,7 +7,8 @@ import {
   Terminal, Megaphone, Trash2, Star, Search, Github, Linkedin, 
   Globe, ExternalLink, Info, ShieldCheck, Zap, BarChart3, Clock,
   Save, Edit2, Settings2, PlusCircle, LayoutGrid, Plus,
-  Settings, BookOpen, ChevronLeft, ChevronRight
+  Settings, BookOpen, ChevronLeft, ChevronRight,
+  Map, Coffee
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -231,8 +232,8 @@ export function PromptArchitect() {
           <div className="bg-primary p-2.5 rounded-xl shadow-lg shadow-primary/20">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <div>
-            <h1 className="text-2xl font-headline font-bold text-primary tracking-tight leading-none">PromptArchitect</h1>
+          <div onClick={handleNewPrompt} className="cursor-pointer group">
+            <h1 className="text-2xl font-headline font-bold text-primary tracking-tight leading-none group-hover:text-primary/80 transition-colors">PromptArchitect</h1>
             <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest mt-1">Prompt Engineering Studio</p>
           </div>
         </div>
@@ -242,20 +243,33 @@ export function PromptArchitect() {
             <div className="flex items-center gap-1 bg-secondary/30 p-1 rounded-lg border border-primary/5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white" onClick={handleNewPrompt}>
-                    <Plus className="w-4 h-4 text-primary" /> New Work
+                  <Button variant="ghost" size="sm" className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white">
+                    <Map className="w-4 h-4 text-primary" /> Roadmap
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Start fresh workspace</TooltipContent>
+                <TooltipContent>View feature roadmap</TooltipContent>
               </Tooltip>
               
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white">
-                    <LayoutGrid className="w-4 h-4 text-primary" /> Templates
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white"
+                    onClick={() => {
+                      if (showHistory && user) {
+                         // Scroll to developer card if history is visible
+                         const devCard = document.querySelector('.group\\/dev');
+                         devCard?.scrollIntoView({ behavior: 'smooth' });
+                      } else {
+                        setShowHistory(true);
+                      }
+                    }}
+                  >
+                    <Coffee className="w-4 h-4 text-primary" /> Meet the Dev
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Browse prompt gallery</TooltipContent>
+                <TooltipContent>Connect with the architect</TooltipContent>
               </Tooltip>
 
               {user && (
