@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Copy, Check, Edit2, Save, LucideIcon, Info, Star } from "lucide-react";
+import { Copy, Check, Edit2, Save, LucideIcon, Info, Star, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,10 +17,15 @@ interface PromptCardProps {
   description: string;
   isStarred?: boolean;
   onStarToggle?: () => void;
+  onRegenerate?: () => void;
+  isRegenerating?: boolean;
   scores: {
     clarity: number;
+    clarityReasoning: string;
     specificity: number;
+    specificityReasoning: string;
     quality: number;
+    qualityReasoning: string;
   };
 }
 
@@ -31,13 +36,14 @@ export function PromptCard({
   description, 
   scores, 
   isStarred, 
-  onStarToggle 
+  onStarToggle,
+  onRegenerate,
+  isRegenerating
 }: PromptCardProps) {
   const [content, setContent] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Update content if initialValue changes (e.g. when picking from history)
   useEffect(() => {
     setContent(initialValue);
   }, [initialValue]);
@@ -49,7 +55,7 @@ export function PromptCard({
   };
 
   return (
-    <Card className="h-full flex flex-col transition-all duration-300 hover:shadow-md border-primary/10 bg-white">
+    <Card className="h-full flex flex-col transition-all duration-300 hover:shadow-md border-primary/10 bg-white group/card">
       <CardHeader className="pb-3 px-4 sm:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -78,6 +84,15 @@ export function PromptCard({
             </div>
           </div>
           <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn("h-8 w-8 text-muted-foreground hover:text-primary transition-all", isRegenerating && "animate-spin")}
+              onClick={onRegenerate}
+              disabled={isRegenerating}
+            >
+              <RefreshCw className="w-4 h-4" />
+            </Button>
             {onStarToggle && (
               <Button
                 variant="ghost"
@@ -124,23 +139,26 @@ export function PromptCard({
               autoFocus
             />
           ) : (
-            <div className="text-xs text-foreground leading-relaxed whitespace-pre-wrap p-3 rounded-md bg-secondary/20 min-h-[140px] border border-transparent">
+            <div className={cn(
+              "text-xs text-foreground leading-relaxed whitespace-pre-wrap p-3 rounded-md bg-secondary/20 min-h-[140px] border border-transparent transition-opacity",
+              isRegenerating && "opacity-50"
+            )}>
               {content}
             </div>
           )}
         </div>
 
         <div className="grid grid-cols-3 gap-3 pt-2">
-          <ScoreIndicator label="Clarity" value={scores.clarity} />
-          <ScoreIndicator label="Specificity" value={scores.specificity} />
-          <ScoreIndicator label="Quality" value={scores.quality} />
+          <ScoreIndicator label="Clarity" value={scores.clarity} reasoning={scores.clarityReasoning} />
+          <ScoreIndicator label="Specificity" value={scores.specificity} reasoning={scores.specificityReasoning} />
+          <ScoreIndicator label="Quality" value={scores.quality} reasoning={scores.qualityReasoning} />
         </div>
       </CardContent>
     </Card>
   );
 }
 
-function ScoreIndicator({ label, value }: { label: string; value: number }) {
+function ScoreIndicator({ label, value, reasoning }: { label: string; value: number; reasoning: string }) {
   const getColor = (v: number) => {
     if (v >= 80) return "bg-green-500";
     if (v >= 50) return "bg-amber-500";
@@ -149,10 +167,20 @@ function ScoreIndicator({ label, value }: { label: string; value: number }) {
 
   return (
     <div className="space-y-1">
-      <div className="flex justify-between text-[10px] font-medium text-muted-foreground">
-        <span>{label}</span>
-        <span className="font-bold text-foreground">{value}</span>
-      </div>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex justify-between text-[10px] font-medium text-muted-foreground cursor-help">
+              <span>{label}</span>
+              <span className="font-bold text-foreground">{value}</span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent className="max-w-[200px] text-[10px] p-2">
+            <p className="font-semibold mb-1">{label} Reasoning:</p>
+            {reasoning}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <Progress value={value} className="h-1" indicatorClassName={getColor(value)} />
     </div>
   );

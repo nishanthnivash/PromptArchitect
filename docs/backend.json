@@ -17,20 +17,38 @@
             "properties": {
               "style": { "type": "string" },
               "content": { "type": "string" },
-              "isStarred": { "type": "boolean", "description": "Whether this specific variation is a favorite." },
+              "isStarred": { "type": "boolean" },
               "scores": {
                 "type": "object",
                 "properties": {
                   "clarity": { "type": "number" },
+                  "clarityReasoning": { "type": "string" },
                   "specificity": { "type": "number" },
-                  "quality": { "type": "number" }
+                  "specificityReasoning": { "type": "string" },
+                  "quality": { "type": "number" },
+                  "qualityReasoning": { "type": "string" }
                 }
-              }
+              },
+              "reasoning": { "type": "string" }
             }
           }
         }
       },
       "required": ["userId", "rawThought", "prompts", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Developer profile settings.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "roleTagline": { "type": "string" },
+        "bio": { "type": "string" },
+        "githubUrl": { "type": "string" },
+        "linkedinUrl": { "type": "string" },
+        "portfolioUrl": { "type": "string" }
+      }
     }
   },
   "auth": {
@@ -40,6 +58,10 @@
     "/savedPrompts/{promptId}": {
       "schema": "SavedPrompt",
       "description": "User saved architected prompts."
+    },
+    "/userProfiles/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile and developer card settings."
     }
   }
 }
