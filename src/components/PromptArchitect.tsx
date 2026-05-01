@@ -238,62 +238,9 @@ export function PromptArchitect() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Main Content Area */}
-        <div className={cn("space-y-8 transition-all duration-500", showHistory && user ? "lg:col-span-8" : "lg:col-span-12")}>
-          <Card className="shadow-lg border-none bg-white overflow-hidden">
-            <div className="h-2 bg-primary w-full" />
-            <CardHeader>
-              <CardTitle className="text-lg font-medium">Draft your raw thought</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <Textarea
-                placeholder="Describe your goal... e.g., A blog post about future space travel or a bug fix report for an API."
-                className="min-h-[120px] text-lg border-primary/10 focus-visible:ring-primary/20 bg-secondary/5"
-                value={rawThought}
-                onChange={(e) => setRawThought(e.target.value)}
-              />
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                {results?.detectedIntent && (
-                  <div className="flex items-center gap-3 bg-accent/5 px-3 py-1.5 rounded-full border border-accent/10">
-                    <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Detected Intent:</span>
-                    <span className="text-sm font-medium">{results.detectedIntent}</span>
-                  </div>
-                )}
-                <Button 
-                  onClick={handleGenerate} 
-                  disabled={loading}
-                  className="bg-primary hover:bg-primary/90 text-white ml-auto h-12 px-8 rounded-full shadow-md active:scale-95 transition-all"
-                >
-                  {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
-                  {loading ? "Designing..." : "Architect Variations"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {results && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
-              {results.prompts.map((p: any, idx: number) => (
-                <PromptCard
-                  key={idx}
-                  title={p.style}
-                  description={p.reasoning}
-                  icon={getIcon(p.style)}
-                  initialValue={p.content}
-                  scores={p.scores}
-                  isStarred={p.isStarred}
-                  onStarToggle={() => handleStarToggle(idx)}
-                  onRegenerate={() => handleRegenerateCard(idx)}
-                  isRegenerating={regeneratingIdx === idx}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Sidebar Panel */}
+        {/* Sidebar Panel (Now on the Left) */}
         {showHistory && user && (
-          <div className="lg:col-span-4 space-y-6 animate-in slide-in-from-right duration-500">
+          <div className="lg:col-span-4 space-y-6 animate-in slide-in-from-left duration-500">
             {/* Developer Card */}
             <Card className="shadow-xl border-none overflow-hidden relative group/dev">
               <div className="absolute top-2 right-2 z-10">
@@ -436,6 +383,59 @@ export function PromptArchitect() {
             </Card>
           </div>
         )}
+
+        {/* Main Content Area */}
+        <div className={cn("space-y-8 transition-all duration-500", showHistory && user ? "lg:col-span-8" : "lg:col-span-12")}>
+          <Card className="shadow-lg border-none bg-white overflow-hidden">
+            <div className="h-2 bg-primary w-full" />
+            <CardHeader>
+              <CardTitle className="text-lg font-medium">Draft your raw thought</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Textarea
+                placeholder="Describe your goal... e.g., A blog post about future space travel or a bug fix report for an API."
+                className="min-h-[120px] text-lg border-primary/10 focus-visible:ring-primary/20 bg-secondary/5"
+                value={rawThought}
+                onChange={(e) => setRawThought(e.target.value)}
+              />
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                {results?.detectedIntent && (
+                  <div className="flex items-center gap-3 bg-accent/5 px-3 py-1.5 rounded-full border border-accent/10">
+                    <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Detected Intent:</span>
+                    <span className="text-sm font-medium">{results.detectedIntent}</span>
+                  </div>
+                )}
+                <Button 
+                  onClick={handleGenerate} 
+                  disabled={loading}
+                  className="bg-primary hover:bg-primary/90 text-white ml-auto h-12 px-8 rounded-full shadow-md active:scale-95 transition-all"
+                >
+                  {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
+                  {loading ? "Designing..." : "Architect Variations"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {results && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
+              {results.prompts.map((p: any, idx: number) => (
+                <PromptCard
+                  key={idx}
+                  title={p.style}
+                  description={p.reasoning}
+                  icon={getIcon(p.style)}
+                  initialValue={p.content}
+                  scores={p.scores}
+                  isStarred={p.isStarred}
+                  onStarToggle={() => handleStarToggle(idx)}
+                  onRegenerate={() => handleRegenerateCard(idx)}
+                  isRegenerating={regeneratingIdx === idx}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
