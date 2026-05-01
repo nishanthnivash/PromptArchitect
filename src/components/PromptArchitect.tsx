@@ -71,8 +71,8 @@ export function PromptArchitect() {
     displayName: "",
     roleTagline: "AI Prompt Engineer",
     bio: "Exploring the boundaries of LLM capabilities.",
-    githubUrl: "",
-    linkedinUrl: "",
+    githubUrl: "https://github.com/nishanthnivash/PromptArchitect",
+    linkedinUrl: "https://www.linkedin.com/in/nishanth-s-77b4a3264",
     portfolioUrl: ""
   });
 
@@ -82,8 +82,8 @@ export function PromptArchitect() {
         displayName: profile.displayName || user?.displayName || "",
         roleTagline: profile.roleTagline || "AI Prompt Engineer",
         bio: profile.bio || "Exploring the boundaries of LLM capabilities.",
-        githubUrl: profile.githubUrl || "",
-        linkedinUrl: profile.linkedinUrl || "",
+        githubUrl: profile.githubUrl || "https://github.com/nishanthnivash/PromptArchitect",
+        linkedinUrl: profile.linkedinUrl || "https://www.linkedin.com/in/nishanth-s-77b4a3264",
         portfolioUrl: profile.portfolioUrl || ""
       });
     } else if (user) {
@@ -277,7 +277,6 @@ export function PromptArchitect() {
                           <StepItem number="4" title="Review, edit, and copy" desc="Pick the best, tweak it, and copy it straight into any AI tool like ChatGPT or Claude." />
                         </div>
                       </section>
-                      <Separator />
                       <section>
                         <h3 className="text-lg font-bold mb-4 text-primary">The 4 prompt styles</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -326,12 +325,17 @@ export function PromptArchitect() {
                     </div>
 
                     <div className="flex items-center justify-center gap-3 mt-8">
-                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-4" asChild>
                         <a href="mailto:nishanthrocky756@gmail.com">
-                          <Mail className="w-4 h-4" /> Email Me
+                          <Mail className="w-4 h-4" /> Email
                         </a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-4" asChild>
+                        <a href="https://github.com/nishanthnivash/PromptArchitect" target="_blank">
+                          <Github className="w-4 h-4" /> Code
+                        </a>
+                      </Button>
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-4" asChild>
                         <a href="https://www.linkedin.com/in/nishanth-s-77b4a3264" target="_blank">
                           <Linkedin className="w-4 h-4" /> LinkedIn
                         </a>
