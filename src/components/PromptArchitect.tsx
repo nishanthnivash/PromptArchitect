@@ -16,7 +16,7 @@ import { generateMultiStylePrompts, regenerateStylePrompt } from "@/ai/flows/gen
 import { useToast } from "@/hooks/use-toast";
 import { useUser, useAuth, useFirestore, useCollection, useDoc } from "@/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { collection, addDoc, serverTimestamp, query, where, orderBy, deleteDoc, doc, updateDoc, setDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, query, where, orderBy, deleteDoc, doc, updateDoc, setDoc, limit } from "firebase/firestore";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -96,7 +96,8 @@ export function PromptArchitect() {
     return query(
       collection(db, "savedPrompts"),
       where("userId", "==", user.uid),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
+      limit(50)
     );
   }, [db, user]);
 
