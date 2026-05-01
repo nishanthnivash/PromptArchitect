@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "dev-portrait",
+      "description": "Professional developer portrait for Meet the Dev section",
+      "imageUrl": "https://picsum.photos/seed/dev-architect/400/400",
+      "imageHint": "developer portrait"
+    }
+  ]
 }

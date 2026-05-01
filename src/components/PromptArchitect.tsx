@@ -341,12 +341,16 @@ export function PromptArchitect() {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-md p-0 overflow-hidden border-none shadow-2xl">
-                  <div className="h-24 bg-gradient-to-r from-primary to-accent w-full" />
-                  <div className="px-6 pb-8 -mt-12 text-center">
-                    <Avatar className="h-24 w-24 mx-auto ring-4 ring-white shadow-lg mb-4">
-                      <AvatarImage src="https://picsum.photos/seed/dev-architect/200/200" data-ai-hint="developer portrait" />
-                      <AvatarFallback>PA</AvatarFallback>
-                    </Avatar>
+                  <div className="h-32 bg-gradient-to-r from-primary to-accent w-full" />
+                  <div className="px-6 pb-8 text-center">
+                    <div className="relative mx-auto -mt-20 mb-4 h-40 w-40 overflow-hidden rounded-2xl border-4 border-white shadow-xl">
+                      <img 
+                        src="https://picsum.photos/seed/dev-architect/400/400" 
+                        alt="Developer Portrait"
+                        className="h-full w-full object-cover"
+                        data-ai-hint="developer portrait"
+                      />
+                    </div>
                     <DialogHeader className="mb-6">
                       <DialogTitle className="text-2xl font-bold">The Prompt Architect</DialogTitle>
                       <DialogDescription className="text-primary font-semibold text-sm">
@@ -415,9 +419,9 @@ export function PromptArchitect() {
                 </Tooltip>
                 
                 <div className="flex items-center gap-2 pl-2 border-l">
-                  <Avatar className="h-8 w-8 ring-2 ring-primary/10">
-                    <AvatarImage src={user.photoURL || ""} />
-                    <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
+                  <Avatar className="h-8 w-8 rounded-lg ring-2 ring-primary/10">
+                    <AvatarImage src={user.photoURL || ""} className="rounded-lg" />
+                    <AvatarFallback className="rounded-lg">{user.displayName?.[0]}</AvatarFallback>
                   </Avatar>
                   <Button variant="ghost" size="icon" className="h-9 w-9 text-destructive hover:bg-destructive/10" onClick={handleLogout}>
                     <LogOut className="w-4 h-4" />
@@ -442,9 +446,9 @@ export function PromptArchitect() {
               </div>
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-4">
-                  <Avatar className="h-14 w-14 ring-4 ring-primary/5">
-                    <AvatarImage src={user.photoURL || ""} />
-                    <AvatarFallback className="bg-primary/10 text-primary font-bold">{profileForm.displayName ? profileForm.displayName[0] : 'U'}</AvatarFallback>
+                  <Avatar className="h-14 w-14 rounded-xl ring-4 ring-primary/5">
+                    <AvatarImage src={user.photoURL || ""} className="rounded-xl" />
+                    <AvatarFallback className="bg-primary/10 text-primary font-bold rounded-xl">{profileForm.displayName ? profileForm.displayName[0] : 'U'}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     {isEditingProfile ? (
