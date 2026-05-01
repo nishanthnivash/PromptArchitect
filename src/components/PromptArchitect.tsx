@@ -8,7 +8,7 @@ import {
   Globe, ExternalLink, Info, ShieldCheck, Zap, BarChart3, Clock,
   Save, Edit2, Settings2, PlusCircle, LayoutGrid, Plus,
   Settings, BookOpen, ChevronLeft, ChevronRight,
-  Map, Coffee
+  Map, Coffee, CheckCircle2, Lightbulb
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,12 +26,21 @@ import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function PromptArchitect() {
   const [rawThought, setRawThought] = useState("");
@@ -241,14 +250,89 @@ export function PromptArchitect() {
         <div className="flex flex-wrap items-center justify-center gap-2">
           <TooltipProvider>
             <div className="flex items-center gap-1 bg-secondary/30 p-1 rounded-lg border border-primary/5">
-              <Tooltip>
-                <TooltipTrigger asChild>
+              <Dialog>
+                <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white">
-                    <Map className="w-4 h-4 text-primary" /> Roadmap
+                    <BookOpen className="w-4 h-4 text-primary" /> How it Works
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent>View feature roadmap</TooltipContent>
-              </Tooltip>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+                  <DialogHeader className="p-6 bg-primary/5">
+                    <DialogTitle className="text-2xl font-bold text-primary">How PromptArchitect works</DialogTitle>
+                    <DialogDescription className="text-base font-medium text-foreground/70">
+                      From raw thought to four structured, ready-to-use prompts in seconds
+                    </DialogDescription>
+                  </DialogHeader>
+                  <ScrollArea className="flex-1 p-6">
+                    <div className="space-y-8">
+                      {/* 4 Step Process */}
+                      <section>
+                        <h3 className="text-lg font-bold flex items-center gap-2 mb-4 text-primary">
+                          <LayoutGrid className="w-5 h-5" /> The 4-step process
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <StepItem 
+                            number="1" 
+                            title="Type your raw thought" 
+                            desc="No need to craft a perfect prompt. Just describe what you need in plain language — a task, a problem, an idea. The messier and more natural, the better."
+                          />
+                          <StepItem 
+                            number="2" 
+                            title="AI detects your intent" 
+                            desc="The engine analyzes your input — identifying your core objective, the context behind it, and the type of output you're likely after."
+                          />
+                          <StepItem 
+                            number="3" 
+                            title="Four prompt styles are generated" 
+                            desc="Your input is transformed into four distinctly structured prompts, each designed for a different use case. Each card is independently scored."
+                          />
+                          <StepItem 
+                            number="4" 
+                            title="Review, edit, and copy" 
+                            desc="Pick the prompt that fits best, tweak it inline if needed, then copy it straight into any AI tool — ChatGPT, Claude, Gemini, or your own API."
+                          />
+                        </div>
+                      </section>
+
+                      {/* Tip Box */}
+                      <div className="bg-accent/10 border border-accent/20 p-4 rounded-xl flex gap-3">
+                        <Lightbulb className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+                        <p className="text-sm text-foreground/80 italic">
+                          <span className="font-bold text-accent">Tip</span> — the more context you give, the better the output. Instead of "write an email", try "write an email to my manager about a delayed project, keeping it professional and solutions-focused".
+                        </p>
+                      </div>
+
+                      <Separator />
+
+                      {/* Prompt Styles */}
+                      <section>
+                        <h3 className="text-lg font-bold mb-4 text-primary">The 4 prompt styles</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <StyleDetail icon={User} title="Persona Approach" desc="Assigns a role and expertise level. Best for professional, nuanced, or domain-specific tasks." />
+                          <StyleDetail icon={GitBranch} title="Chain-of-Thought" desc="Guides AI through logical step-by-step reasoning. Best for analysis and problem-solving." />
+                          <StyleDetail icon={Terminal} title="Technical / Coding" desc="Structures prompt for precise, code-ready output. Best for devs, APIs, and system design." />
+                          <StyleDetail icon={Megaphone} title="Marketing / Sales" desc="Frames output as persuasive copy. Best for pitches, product descriptions, and messaging." />
+                        </div>
+                      </section>
+
+                      {/* Scoring */}
+                      <section className="bg-secondary/20 p-6 rounded-2xl">
+                        <h3 className="text-lg font-bold mb-4 text-center">How prompts are scored</h3>
+                        <div className="flex flex-wrap justify-around gap-6">
+                          <ScoreItem label="Clarity" desc="Is it unambiguous?" />
+                          <ScoreItem label="Specificity" desc="Does it define scope?" />
+                          <ScoreItem label="Quality" desc="Will AI respond well?" />
+                        </div>
+                      </section>
+
+                      <footer className="text-center py-4 text-muted-foreground text-sm font-medium">
+                        <p>Takes about 2 seconds · Works with any AI tool</p>
+                        <Button className="mt-4 bg-primary px-8 rounded-full" onClick={() => document.querySelector('textarea')?.focus()}>Try it now</Button>
+                      </footer>
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
               
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -258,7 +342,6 @@ export function PromptArchitect() {
                     className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white"
                     onClick={() => {
                       if (showHistory && user) {
-                         // Scroll to developer card if history is visible
                          const devCard = document.querySelector('.group\\/dev');
                          devCard?.scrollIntoView({ behavior: 'smooth' });
                       } else {
@@ -529,6 +612,41 @@ export function PromptArchitect() {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function StepItem({ number, title, desc }: { number: string; title: string; desc: string }) {
+  return (
+    <div className="flex gap-4">
+      <div className="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">{number}</div>
+      <div>
+        <h4 className="font-bold text-sm mb-1">{title}</h4>
+        <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function StyleDetail({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
+  return (
+    <div className="p-3 border rounded-xl hover:border-primary/30 transition-colors flex gap-3">
+      <div className="bg-primary/5 p-2 rounded-lg text-primary">
+        <Icon className="w-4 h-4" />
+      </div>
+      <div>
+        <h4 className="text-[13px] font-bold">{title}</h4>
+        <p className="text-[11px] text-muted-foreground leading-tight">{desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function ScoreItem({ label, desc }: { label: string; desc: string }) {
+  return (
+    <div className="text-center">
+      <p className="text-xs font-bold text-primary">{label}</p>
+      <p className="text-[10px] text-muted-foreground">{desc}</p>
     </div>
   );
 }
