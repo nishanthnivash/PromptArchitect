@@ -1,0 +1,44 @@
+
+{
+  "entities": {
+    "SavedPrompt": {
+      "title": "Saved Prompt",
+      "description": "A collection of architected prompts saved by a user.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the user who saved the prompt." },
+        "rawThought": { "type": "string", "description": "The original input provided by the user." },
+        "detectedIntent": { "type": "string", "description": "The intent detected by the AI." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "prompts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "style": { "type": "string" },
+              "content": { "type": "string" },
+              "scores": {
+                "type": "object",
+                "properties": {
+                  "clarity": { "type": "number" },
+                  "specificity": { "type": "number" },
+                  "quality": { "type": "number" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": ["userId", "rawThought", "prompts", "createdAt"]
+    }
+  },
+  "auth": {
+    "providers": ["google.com"]
+  },
+  "firestore": {
+    "/savedPrompts/{promptId}": {
+      "schema": "SavedPrompt",
+      "description": "User saved architected prompts."
+    }
+  }
+}
