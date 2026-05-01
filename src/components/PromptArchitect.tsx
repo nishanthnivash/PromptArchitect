@@ -130,7 +130,12 @@ export function PromptArchitect() {
       toast({ title: "Welcome back!", description: "Profile synchronized." });
     } catch (error: any) {
       if (error.code !== 'auth/cancelled-popup-request') {
-        toast({ title: "Sign in failed", variant: "destructive" });
+        toast({ 
+          title: "Sign in failed", 
+          description: `Error: ${error.code}`,
+          variant: "destructive" 
+        });
+        console.error("Firebase Auth Error:", error);
       }
     } finally {
       setSigningIn(false);
