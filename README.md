@@ -26,3 +26,13 @@ PromptArchitect is a professional prompt engineering studio designed to bridge t
 2. Install dependencies: `npm install`
 3. Configure your `.env` with Firebase and Gemini API keys.
 4. Run development server: `npm run dev`
+
+## Git Troubleshooting (403 Error)
+If you get a `Permission denied` (403) error when pushing:
+1. **Invite as Collaborator**: Go to `nishanthnivash/PromptArchitect` > Settings > Collaborators and invite `nishanthrocky756-nis`.
+2. **Update Local User**: Run these in your terminal:
+   ```bash
+   git config user.name "nishanthnivash"
+   git config user.email "your-email@example.com"
+   ```
+3. **Use Personal Access Token**: If prompted for a password, use a GitHub PAT instead of your account password.
