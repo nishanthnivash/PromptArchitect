@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Copy, Check, Edit2, Save, LucideIcon, Info, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,6 +37,11 @@ export function PromptCard({
   const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // Update content if initialValue changes (e.g. when picking from history)
+  useEffect(() => {
+    setContent(initialValue);
+  }, [initialValue]);
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(content);
     setCopied(true);
@@ -45,22 +50,24 @@ export function PromptCard({
 
   return (
     <Card className="h-full flex flex-col transition-all duration-300 hover:shadow-md border-primary/10 bg-white">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 px-4 sm:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-primary/10 text-primary">
               <Icon className="w-5 h-5" />
             </div>
             <div>
-              <CardTitle className="text-base font-semibold text-primary">
+              <CardTitle className="text-sm sm:text-base font-semibold text-primary">
                 {title}
               </CardTitle>
               <div className="flex items-center gap-1">
-                <p className="text-[10px] text-muted-foreground max-w-[150px] truncate">{description}</p>
+                <p className="text-[10px] text-muted-foreground max-w-[120px] sm:max-w-[150px] truncate">{description}</p>
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
-                      <Info className="w-3 h-3 text-muted-foreground" />
+                    <TooltipTrigger asChild>
+                      <button type="button" className="cursor-help">
+                        <Info className="w-3 h-3 text-muted-foreground" />
+                      </button>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-[200px] text-xs">
                       {description}
@@ -76,38 +83,38 @@ export function PromptCard({
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "h-7 w-7",
+                  "h-8 w-8",
                   isStarred ? "text-amber-500 fill-amber-500" : "text-muted-foreground hover:text-amber-500"
                 )}
                 onClick={onStarToggle}
               >
-                <Star className="w-3 h-3" />
+                <Star className="w-4 h-4" />
               </Button>
             )}
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-primary"
+              className="h-8 w-8 text-muted-foreground hover:text-primary"
               onClick={() => setIsEditing(!isEditing)}
             >
-              {isEditing ? <Save className="w-3 h-3" /> : <Edit2 className="w-3 h-3" />}
+              {isEditing ? <Save className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
             </Button>
             <Button
               variant="ghost"
               size="icon"
               className={cn(
-                "h-7 w-7 transition-colors",
+                "h-8 w-8 transition-colors",
                 copied ? "text-green-500" : "text-muted-foreground hover:text-primary"
               )}
               onClick={handleCopy}
             >
-              {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
         </div>
       </CardHeader>
       
-      <CardContent className="flex-1 space-y-4">
+      <CardContent className="flex-1 space-y-4 px-4 sm:px-6">
         <div className="relative">
           {isEditing ? (
             <Textarea
