@@ -8,7 +8,7 @@ import {
   Globe, ExternalLink, Info, ShieldCheck, Zap, BarChart3, Clock,
   Save, Edit2, Settings2, PlusCircle, LayoutGrid, Plus,
   Settings, BookOpen, ChevronLeft, ChevronRight,
-  Map, Coffee, CheckCircle2, Lightbulb
+  Map, Coffee, CheckCircle2, Lightbulb, Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -334,26 +334,50 @@ export function PromptArchitect() {
                 </DialogContent>
               </Dialog>
               
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white"
-                    onClick={() => {
-                      if (showHistory && user) {
-                         const devCard = document.querySelector('.group\\/dev');
-                         devCard?.scrollIntoView({ behavior: 'smooth' });
-                      } else {
-                        setShowHistory(true);
-                      }
-                    }}
-                  >
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-9 px-3 gap-2 text-xs font-semibold hover:bg-white">
                     <Coffee className="w-4 h-4 text-primary" /> Meet the Dev
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent>Connect with the architect</TooltipContent>
-              </Tooltip>
+                </DialogTrigger>
+                <DialogContent className="max-w-md p-0 overflow-hidden border-none shadow-2xl">
+                  <div className="h-24 bg-gradient-to-r from-primary to-accent w-full" />
+                  <div className="px-6 pb-8 -mt-12 text-center">
+                    <Avatar className="h-24 w-24 mx-auto ring-4 ring-white shadow-lg mb-4">
+                      <AvatarImage src="https://picsum.photos/seed/dev-architect/200/200" data-ai-hint="developer portrait" />
+                      <AvatarFallback>PA</AvatarFallback>
+                    </Avatar>
+                    <DialogHeader className="mb-6">
+                      <DialogTitle className="text-2xl font-bold">The Prompt Architect</DialogTitle>
+                      <DialogDescription className="text-primary font-semibold text-sm">
+                        Full-stack developer building AI-powered productivity tools.
+                      </DialogDescription>
+                    </DialogHeader>
+                    
+                    <div className="space-y-4 text-sm text-foreground/80 leading-relaxed text-left bg-secondary/20 p-4 rounded-2xl border border-primary/5">
+                      <p>
+                        I built PromptArchitect because I kept rewriting the same prompts over and over. This tool is my answer to that — structured, fast, and opinionated.
+                      </p>
+                      <p className="font-medium text-foreground">
+                        Open to feedback, collabs, and freelance projects.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-center gap-3 mt-8">
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
+                        <a href="mailto:hello@promptarchitect.ai">
+                          <Mail className="w-4 h-4" /> Email Me
+                        </a>
+                      </Button>
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
+                        <a href="https://linkedin.com" target="_blank">
+                          <Linkedin className="w-4 h-4" /> LinkedIn
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
               {user && (
                 <Tooltip>
