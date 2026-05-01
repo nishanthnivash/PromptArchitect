@@ -68,7 +68,7 @@ export function PromptArchitect() {
   const { data: profile } = useDoc(userProfileRef);
 
   const [profileForm, setProfileForm] = useState({
-    displayName: "",
+    displayName: "Nishanth S",
     roleTagline: "AI Prompt Engineer",
     bio: "Exploring the boundaries of LLM capabilities.",
     githubUrl: "https://github.com/nishanthnivash/PromptArchitect",
@@ -79,7 +79,7 @@ export function PromptArchitect() {
   useEffect(() => {
     if (profile) {
       setProfileForm({
-        displayName: profile.displayName || user?.displayName || "",
+        displayName: profile.displayName || "Nishanth S",
         roleTagline: profile.roleTagline || "AI Prompt Engineer",
         bio: profile.bio || "Exploring the boundaries of LLM capabilities.",
         githubUrl: profile.githubUrl || "https://github.com/nishanthnivash/PromptArchitect",
@@ -87,7 +87,7 @@ export function PromptArchitect() {
         portfolioUrl: profile.portfolioUrl || ""
       });
     } else if (user) {
-      setProfileForm(prev => ({ ...prev, displayName: user.displayName || "" }));
+      setProfileForm(prev => ({ ...prev, displayName: user.displayName || "Nishanth S" }));
     }
   }, [profile, user]);
 
@@ -309,9 +309,9 @@ export function PromptArchitect() {
                       />
                     </div>
                     <DialogHeader className="mb-6">
-                      <DialogTitle className="text-2xl font-bold">The Prompt Architect</DialogTitle>
+                      <DialogTitle className="text-2xl font-bold">Nishanth S</DialogTitle>
                       <DialogDescription className="text-primary font-semibold text-sm">
-                        Full-stack developer building AI-powered productivity tools.
+                        The Prompt Architect · Full-stack developer building AI-powered productivity tools.
                       </DialogDescription>
                     </DialogHeader>
                     
@@ -325,12 +325,12 @@ export function PromptArchitect() {
                     </div>
 
                     <div className="flex items-center justify-center gap-3 mt-8">
-                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-4" asChild>
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
                         <a href="mailto:nishanthrocky756@gmail.com">
                           <Mail className="w-4 h-4" /> Email Me
                         </a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-4" asChild>
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 px-6" asChild>
                         <a href="https://www.linkedin.com/in/nishanth-s-77b4a3264" target="_blank">
                           <Linkedin className="w-4 h-4" /> LinkedIn
                         </a>
@@ -420,7 +420,7 @@ export function PromptArchitect() {
                         placeholder="Your Name"
                       />
                     ) : (
-                      <CardTitle className="text-lg font-bold truncate text-primary">{profileForm.displayName || "Anonymous Engineer"}</CardTitle>
+                      <CardTitle className="text-lg font-bold truncate text-primary">{profileForm.displayName}</CardTitle>
                     )}
                     {isEditingProfile ? (
                       <Input 
