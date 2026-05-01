@@ -304,7 +304,7 @@ export function PromptArchitect() {
                       <img 
                         src={devPortrait} 
                         alt="Developer Portrait"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover object-top"
                         data-ai-hint="developer portrait"
                       />
                     </div>
@@ -407,7 +407,7 @@ export function PromptArchitect() {
                     <img 
                       src={devPortrait} 
                       alt="Profile" 
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover object-top"
                       data-ai-hint="developer portrait"
                     />
                   </div>
