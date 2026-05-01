@@ -14,10 +14,14 @@ import { collection, addDoc, serverTimestamp, query, where, orderBy, deleteDoc, 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 export function PromptArchitect() {
   const [rawThought, setRawThought] = useState("");
   const [loading, setLoading] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const [results, setResults] = useState<GenerateMultiStylePromptsOutput | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   
@@ -38,11 +42,20 @@ export function PromptArchitect() {
   const { data: history } = useCollection(historyQuery);
 
   const handleLogin = async () => {
-    if (!auth) return;
+    if (!auth || signingIn) return;
+    setSigningIn(true);
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (error.code !== 'auth/cancelled-popup-request') {
+        toast({
+          title: "Sign in failed",
+          description: error.message || "Could not sign in with Google.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setSigningIn(false);
     }
   };
 
@@ -68,19 +81,28 @@ export function PromptArchitect() {
       setResults(output);
       
       if (user && db) {
-        addDoc(collection(db, "savedPrompts"), {
+        const promptsRef = collection(db, "savedPrompts");
+        const data = {
           userId: user.uid,
           rawThought,
           detectedIntent: output.detectedIntent,
           prompts: output.prompts,
           createdAt: serverTimestamp(),
+        };
+
+        addDoc(promptsRef, data).catch(async (serverError) => {
+          const permissionError = new FirestorePermissionError({
+            path: promptsRef.path,
+            operation: 'create',
+            requestResourceData: data,
+          });
+          errorEmitter.emit('permission-error', permissionError);
         });
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
       toast({
         title: "Generation failed",
-        description: "There was an error architecting your prompts.",
+        description: error.message || "There was an error architecting your prompts.",
         variant: "destructive",
       });
     } finally {
@@ -100,12 +122,18 @@ export function PromptArchitect() {
 
   const handleDeleteHistory = (id: string) => {
     if (!db) return;
-    deleteDoc(doc(db, "savedPrompts", id));
+    const docRef = doc(db, "savedPrompts", id);
+    deleteDoc(docRef).catch(async (serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: docRef.path,
+        operation: 'delete',
+      });
+      errorEmitter.emit('permission-error', permissionError);
+    });
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Navbar-ish header */}
       <div className="flex justify-between items-center mb-12">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary">PromptArchitect</h1>
@@ -123,8 +151,8 @@ export function PromptArchitect() {
               </Button>
             </>
           ) : (
-            <Button size="sm" onClick={handleLogin}>
-              <LogIn className="w-4 h-4 mr-2" />
+            <Button size="sm" onClick={handleLogin} disabled={signingIn}>
+              {signingIn ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <LogIn className="w-4 h-4 mr-2" />}
               Sign In to Save
             </Button>
           )}
@@ -132,7 +160,6 @@ export function PromptArchitect() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Main Interface */}
         <div className={cn("space-y-8", showHistory ? "lg:col-span-8" : "lg:col-span-12")}>
           <div className="bg-white rounded-xl shadow-sm border p-6">
             <label className="block text-sm font-medium mb-3">Architect your idea</label>
@@ -180,7 +207,6 @@ export function PromptArchitect() {
           )}
         </div>
 
-        {/* Sidebar History */}
         {showHistory && user && (
           <div className="lg:col-span-4 space-y-4">
             <Card className="h-[calc(100vh-200px)]">
@@ -229,8 +255,4 @@ export function PromptArchitect() {
       </div>
     </div>
   );
-}
-
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(" ");
 }
