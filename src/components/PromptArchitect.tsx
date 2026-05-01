@@ -5,7 +5,8 @@ import { useState, useMemo, useEffect } from "react";
 import { 
   Sparkles, Loader2, History, LogIn, LogOut, User, GitBranch, 
   Terminal, Megaphone, Trash2, Star, Search, Github, Linkedin, 
-  Globe, ExternalLink, Info, ShieldCheck, Zap, BarChart3, Clock
+  Globe, ExternalLink, Info, ShieldCheck, Zap, BarChart3, Clock,
+  Save, Edit2, Settings2, PlusCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,8 +21,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
@@ -33,7 +32,7 @@ export function PromptArchitect() {
   const [signingIn, setSigningIn] = useState(false);
   const [results, setResults] = useState<any | null>(null);
   const [activeDocId, setActiveDocId] = useState<string | null>(null);
-  const [showHistory, setShowHistory] = useState(false);
+  const [showHistory, setShowHistory] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -186,7 +185,7 @@ export function PromptArchitect() {
   const handleSaveProfile = async () => {
     if (!user || !db) return;
     setIsEditingProfile(false);
-    setDoc(doc(db, "userProfiles", user.uid), { ...profileForm, userId: user.uid });
+    setDoc(doc(db, "userProfiles", user.uid), { ...profileForm, userId: user.uid }, { merge: true });
     toast({ description: "Profile updated." });
   };
 
@@ -228,7 +227,7 @@ export function PromptArchitect() {
           ) : (
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => setShowHistory(!showHistory)}>
-                <History className="w-4 h-4 mr-2" /> {showHistory ? "Hide Library" : "Library"}
+                <History className="w-4 h-4 mr-2" /> {showHistory ? "Compact" : "Expand Library"}
               </Button>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4" />
@@ -240,7 +239,7 @@ export function PromptArchitect() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Main Content Area */}
-        <div className={cn("space-y-8 transition-all duration-500", showHistory ? "lg:col-span-8" : "lg:col-span-12")}>
+        <div className={cn("space-y-8 transition-all duration-500", showHistory && user ? "lg:col-span-8" : "lg:col-span-12")}>
           <Card className="shadow-lg border-none bg-white overflow-hidden">
             <div className="h-2 bg-primary w-full" />
             <CardHeader>
@@ -297,8 +296,8 @@ export function PromptArchitect() {
           <div className="lg:col-span-4 space-y-6 animate-in slide-in-from-right duration-500">
             {/* Developer Card */}
             <Card className="shadow-xl border-none overflow-hidden relative group/dev">
-              <div className="absolute top-2 right-2 opacity-0 group-hover/dev:opacity-100 transition-opacity">
-                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setIsEditingProfile(!isEditingProfile)}>
+              <div className="absolute top-2 right-2 z-10">
+                <Button variant="ghost" size="icon" className="h-7 w-7 bg-white/50 backdrop-blur-sm" onClick={() => setIsEditingProfile(!isEditingProfile)}>
                   {isEditingProfile ? <Save className="h-4 w-4" /> : <Edit2 className="h-4 w-4" />}
                 </Button>
               </div>
@@ -306,26 +305,28 @@ export function PromptArchitect() {
                 <div className="flex items-center gap-4">
                   <Avatar className="h-14 w-14 ring-2 ring-primary/20">
                     <AvatarImage src={user.photoURL || ""} />
-                    <AvatarFallback>{profileForm.displayName[0]}</AvatarFallback>
+                    <AvatarFallback>{profileForm.displayName ? profileForm.displayName[0] : 'U'}</AvatarFallback>
                   </Avatar>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     {isEditingProfile ? (
                       <Input 
                         value={profileForm.displayName} 
                         onChange={e => setProfileForm({...profileForm, displayName: e.target.value})} 
                         className="h-7 text-sm mb-1"
+                        placeholder="Your Name"
                       />
                     ) : (
-                      <CardTitle className="text-lg font-bold">{profileForm.displayName}</CardTitle>
+                      <CardTitle className="text-lg font-bold truncate">{profileForm.displayName || "Anonymous Engineer"}</CardTitle>
                     )}
                     {isEditingProfile ? (
                       <Input 
                         value={profileForm.roleTagline} 
                         onChange={e => setProfileForm({...profileForm, roleTagline: e.target.value})} 
                         className="h-7 text-xs"
+                        placeholder="Role Tagline"
                       />
                     ) : (
-                      <p className="text-xs text-primary font-semibold">{profileForm.roleTagline}</p>
+                      <p className="text-xs text-primary font-semibold truncate">{profileForm.roleTagline}</p>
                     )}
                   </div>
                 </div>
@@ -336,6 +337,7 @@ export function PromptArchitect() {
                     value={profileForm.bio} 
                     onChange={e => setProfileForm({...profileForm, bio: e.target.value})} 
                     className="text-xs min-h-[60px]"
+                    placeholder="Short bio..."
                   />
                 ) : (
                   <p className="text-xs text-muted-foreground leading-relaxed italic">"{profileForm.bio}"</p>
@@ -345,7 +347,11 @@ export function PromptArchitect() {
                   <SocialLink icon={Linkedin} href={profileForm.linkedinUrl} editMode={isEditingProfile} value={profileForm.linkedinUrl} onChange={v => setProfileForm({...profileForm, linkedinUrl: v})} />
                   <SocialLink icon={Globe} href={profileForm.portfolioUrl} editMode={isEditingProfile} value={profileForm.portfolioUrl} onChange={v => setProfileForm({...profileForm, portfolioUrl: v})} />
                 </div>
-                {isEditingProfile && <Button size="sm" className="w-full h-8" onClick={handleSaveProfile}>Save Profile</Button>}
+                {isEditingProfile && (
+                  <Button size="sm" className="w-full h-8" onClick={handleSaveProfile}>
+                    <Save className="w-3 h-3 mr-2" /> Save Profile
+                  </Button>
+                )}
               </CardContent>
             </Card>
 
@@ -360,8 +366,8 @@ export function PromptArchitect() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-[11px] text-muted-foreground mb-4">
-                  Architect high-performance AI prompts using persona-based design and scoring.
+                <p className="text-[11px] text-muted-foreground mb-4 leading-normal">
+                  Architect high-performance AI prompts using persona-based design, step-by-step reasoning, and multi-dimensional scoring.
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   <StatItem icon={Zap} label="Styles" value="4 Core" />
@@ -373,7 +379,7 @@ export function PromptArchitect() {
             </Card>
 
             {/* Prompt Library */}
-            <Card className="shadow-xl border-none flex-1 flex flex-col min-h-[300px]">
+            <Card className="shadow-xl border-none flex-1 flex flex-col min-h-[350px]">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-bold flex items-center gap-2">
@@ -393,14 +399,14 @@ export function PromptArchitect() {
                 </Tabs>
               </CardHeader>
               <CardContent className="p-0 overflow-hidden flex-1">
-                <ScrollArea className="h-[250px] px-4 pb-4">
+                <ScrollArea className="h-[280px] px-4 pb-4">
                   <div className="space-y-2">
                     {filteredHistory.map(item => (
                       <div 
                         key={item.id} 
                         className={cn(
                           "p-3 border rounded-lg bg-secondary/5 group relative hover:border-primary/20 transition-all cursor-pointer",
-                          activeDocId === item.id && "border-primary/40 bg-primary/5"
+                          activeDocId === item.id && "border-primary/40 bg-primary/5 shadow-inner"
                         )}
                         onClick={() => {
                           setResults({ rawThought: item.rawThought, detectedIntent: item.detectedIntent, prompts: item.prompts });
@@ -408,16 +414,22 @@ export function PromptArchitect() {
                           setRawThought(item.rawThought);
                         }}
                       >
-                        <Button variant="ghost" size="icon" className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 h-6 w-6 text-destructive" onClick={(e) => { e.stopPropagation(); deleteDoc(doc(db!, "savedPrompts", item.id)); }}>
+                        <Button variant="ghost" size="icon" className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 h-6 w-6 text-destructive hover:bg-destructive/10" onClick={(e) => { e.stopPropagation(); deleteDoc(doc(db!, "savedPrompts", item.id)); }}>
                           <Trash2 className="w-3 h-3" />
                         </Button>
-                        <div className="flex items-center gap-1 mb-1">
-                          {item.prompts.some((p: any) => p.isStarred) && <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />}
-                          <p className="text-[10px] font-bold line-clamp-1">{item.detectedIntent}</p>
+                        <div className="flex items-center gap-1 mb-1 pr-6">
+                          {item.prompts.some((p: any) => p.isStarred) && <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500 shrink-0" />}
+                          <p className="text-[10px] font-bold truncate">{item.detectedIntent}</p>
                         </div>
-                        <p className="text-[9px] text-muted-foreground line-clamp-1 italic">"{item.rawThought}"</p>
+                        <p className="text-[9px] text-muted-foreground line-clamp-1 italic pr-6">"{item.rawThought}"</p>
                       </div>
                     ))}
+                    {filteredHistory.length === 0 && (
+                      <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
+                        <History className="w-8 h-8 mb-2 opacity-20" />
+                        <p className="text-[10px]">No history found.</p>
+                      </div>
+                    )}
                   </div>
                 </ScrollArea>
               </CardContent>
