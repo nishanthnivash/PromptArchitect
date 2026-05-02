@@ -334,7 +334,9 @@ export function PromptArchitect() {
               <h1 className="text-xl font-bold text-slate-900 tracking-tight leading-none group-hover:text-primary transition-colors">PromptArchitect</h1>
               <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Professional Studio</p>
             </div>
-          </div            <div className="flex items-center gap-3">
+          </div>
+
+          <div className="flex items-center gap-3">
               {/* Desktop Library Toggle */}
               <div className="hidden lg:flex items-center gap-1 bg-slate-100/50 p-1 rounded-xl border border-slate-200/50">
                 <Button 
