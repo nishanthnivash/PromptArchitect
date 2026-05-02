@@ -334,7 +334,7 @@ export function PromptArchitect() {
               <h1 className="text-xl font-bold text-slate-900 tracking-tight leading-none group-hover:text-primary transition-colors">PromptArchitect</h1>
               <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Professional Studio</p>
             </div>
-          </div>
+
 
           <div className="flex items-center gap-3">
               {/* Desktop Library Toggle */}
@@ -439,8 +439,8 @@ export function PromptArchitect() {
                   <LogOut className="w-3.5 h-3.5" />
                 </Button>
               </div>
-            </div> </div>
-        </div>
+            </div>
+          </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Sidebar Panel (Left Side) */}
@@ -544,6 +544,7 @@ export function PromptArchitect() {
         </div>
       </div>
     </div>
+  </div>
   );
 }
 
