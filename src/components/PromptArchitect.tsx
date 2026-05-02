@@ -249,7 +249,10 @@ export function PromptArchitect() {
               </Button>
               <div className="flex items-center gap-3 px-4">
                 <div className="flex -space-x-3">
-                  {[1,2,3].map(i => (
+                  <div className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 shadow-sm overflow-hidden">
+                    <img src="https://i.ibb.co/LXhqR8WM/image.png" alt="User" className="w-full h-full object-cover" />
+                  </div>
+                  {[1,2].map(i => (
                     <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 shadow-sm" />
                   ))}
                 </div>
@@ -296,8 +299,12 @@ export function PromptArchitect() {
         {/* Meet the Dev Footer */}
         <footer className="py-20 bg-slate-50">
           <div className="max-w-4xl mx-auto px-6 text-center space-y-12">
-             <div className="space-y-4">
-               <h3 className="text-2xl font-bold text-slate-900">Crafted by Nishanth S</h3>
+             <div className="space-y-6">
+                <div className="relative h-28 w-28 mx-auto overflow-hidden rounded-full border-4 border-white shadow-2xl transition-transform hover:scale-105 duration-500">
+                  <img src="https://i.ibb.co/LXhqR8WM/image.png" alt="Nishanth S" className="h-full w-full object-cover" />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-slate-900">Crafted by Nishanth S</h3>
                <p className="text-slate-500 max-w-lg mx-auto leading-relaxed">
                  I built PromptArchitect to bridge the gap between human intuition and machine precision. Every feature is designed for speed and clarity.
                </p>
